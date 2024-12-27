@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { lazy, Suspense } from "react"
+import { lazy, Suspense, useEffect } from "react"
 import Header from "./components/custom/Header";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -11,6 +11,12 @@ const OrderDetails=lazy(()=>import("./pages/OrderDetails"));
 const Login = lazy(() => import("./pages/Login"));
 
 const App = () => {
+
+
+  useEffect(()=>{
+
+  },[])
+
   return (
     <Router>
       <Header/>

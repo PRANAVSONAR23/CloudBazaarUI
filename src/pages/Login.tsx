@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../firebase';
+import { useLoginMutation } from '@/redux/api/userAPI';
 
 // Gender options
 const genderOptions = [
@@ -43,14 +46,20 @@ const Login: React.FC = () => {
     }));
   };
 
+  
+
+  const [login]=useLoginMutation()
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Replace with your actual signup endpoint
-      const response = await axios.post('/api/signup', formData);
-      console.log('Signup successful', response.data);
-      alert('Signup Successful!');
+      // const provider= new GoogleAuthProvider();
+      // const {user}=await signInWithPopup(auth,provider);
+      // console.log("user:",user);
+
+     console.log("formdata:",formData)
+      
     } catch (error) {
       console.error('Signup error', error);
       alert('Signup Failed');
@@ -58,9 +67,32 @@ const Login: React.FC = () => {
   };
 
   // Handle Google Sign Up
-  const handleGoogleSignup = () => {
-    // Typically, this would redirect to Google OAuth
-    window.location.href = '/api/google-signup';
+  const handleGoogleSignup = async() => {
+    const provider= new GoogleAuthProvider();
+    const {user}=await signInWithPopup(auth,provider);
+   
+    console.log('gender:',formData.gender)
+    console.log('dob:', formData.dateOfBirth)
+    console.log("id:",user.uid)
+    console.log("name:",user.displayName)
+    console.log("email:",user.email)
+    console.log("photo:",user.photoURL)
+   await login({
+    _id:user.uid,
+    name:user.displayName!,
+    email:user.email!,
+    photo:user.photoURL!,
+    role:"user",
+    gender:formData.gender,
+    dob:formData.dateOfBirth
+   }).unwrap().then((res)=>{
+    console.log(res);
+    if(res.success){
+      alert("Login Successful")
+    }else{
+      alert("Login Failed")
+    }
+   })
   };
 
   // Calculate min and max dates for date of birth

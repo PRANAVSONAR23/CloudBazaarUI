@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const user = { _id:123, role: "admin"};
+  const user = { _id:null, role: "admin"};
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
