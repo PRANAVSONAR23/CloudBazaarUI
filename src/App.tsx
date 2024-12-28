@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import Header from "./components/custom/Header";
 import { onAuthStateChanged } from "firebase/auth";
@@ -9,10 +14,12 @@ import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { UserReducerInitialState } from "./types/reducer-types";
 import Loader from "./components/custom/Loader";
 import ProtectedRoute from "./components/custom/ProtectedRoute";
-import Sidebar from "./components/custom/Sidebar";
+import {AppSidebar} from "./components/custom/Sidebar";
 import DashBoard from "./pages/DashBoard";
 import Products from "./pages/Products";
 import Costomer from "./pages/Costomer";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -41,7 +48,7 @@ const App = () => {
   }, []);
 
   return loading ? (
-    <Loader/>
+    <Loader />
   ) : (
     <Router>
       <Header user={user} />
@@ -50,38 +57,57 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
-
           <Route>
-            <Route path="/login" element={<ProtectedRoute isAuthenticated={user?false:true}><Login/></ProtectedRoute>} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute isAuthenticated={user ? false : true}>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-
-          <Route element={<ProtectedRoute isAuthenticated={user?true:false}></ProtectedRoute>}>
+          <Route
+            element={
+              <ProtectedRoute
+                isAuthenticated={user ? true : false}
+              ></ProtectedRoute>
+            }
+          >
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
           </Route>
 
-
+          
           //admin routes
           <Route
-  element={
-    <ProtectedRoute
-      isAuthenticated={!!user}
-      isAdmin={user?.role==='admin'?true:false}
-      adminOnly={true}
-    >
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <Outlet />
-      </div>
-    </ProtectedRoute>
-  }
->
-  <Route path="/admin/dashboard" element={<DashBoard />} />
-  <Route path="/admin/costomer" element={<Costomer />} />
-  <Route path="/admin/products" element={<Products />} />
-</Route>
-          
+            element={
+              <ProtectedRoute
+                isAuthenticated={!!user}
+                isAdmin={user?.role === "admin" ? true : false}
+                adminOnly={true}
+              >
+                <SidebarProvider>
+                <div className="flex justify-between">
+                  <AppSidebar />
+                  <SidebarTrigger/>
+                  <Outlet />
+                </div>
+                </SidebarProvider>
+              </ProtectedRoute>
+              
+            }
+          >
+            <Route path="/admin/dashboard" element={<DashBoard />} />
+            <Route path="/admin/costomer" element={<Costomer />} />
+            <Route path="/admin/products" element={<Products />} />
+
+
+
+          </Route>
+
+
         </Routes>
       </Suspense>
     </Router>
