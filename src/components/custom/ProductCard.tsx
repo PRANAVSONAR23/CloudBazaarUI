@@ -1,3 +1,5 @@
+import { server } from "@/redux/store";
+
 type ProductsProp = {
     productId: string;
     photo: string;
@@ -20,7 +22,7 @@ type ProductsProp = {
         {/* Product Image */}
         <div className="w-full h-64 bg-slate-200 rounded-lg overflow-hidden">
           <img
-            src={photo}
+            src={`${server}/${photo}`}
             alt={`Image of ${name}`}
             className="w-full h-full object-cover"
           />

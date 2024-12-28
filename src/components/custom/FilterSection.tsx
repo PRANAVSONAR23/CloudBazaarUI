@@ -1,3 +1,4 @@
+import { useCategoriesQuery } from "@/redux/api/productAPI";
 import React from "react";
 
 interface FilterProps {
@@ -6,6 +7,10 @@ interface FilterProps {
 }
 
 const FilterSection: React.FC<FilterProps> = ({ filters, onFiltersChange }) => {
+
+
+const{data,isLoading,isError}=useCategoriesQuery("")
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     onFiltersChange({
       ...filters,
@@ -21,6 +26,10 @@ const FilterSection: React.FC<FilterProps> = ({ filters, onFiltersChange }) => {
     });
   };
 
+  if(isError){
+    return <h1>Something went wrong</h1>
+  }
+
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
@@ -34,8 +43,8 @@ const FilterSection: React.FC<FilterProps> = ({ filters, onFiltersChange }) => {
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
         >
-          <option value="low-to-high">Price: Low to High</option>
-          <option value="high-to-low">Price: High to Low</option>
+          <option value="asc">Price: Low to High</option>
+          <option value="dsc">Price: High to Low</option>
         </select>
       </div>
 
@@ -63,9 +72,11 @@ const FilterSection: React.FC<FilterProps> = ({ filters, onFiltersChange }) => {
           className="w-full border border-gray-300 rounded px-3 py-2"
         >
           <option value="all">All</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+         {
+          isLoading===false && data?.categories.map((cat)=>{
+            return <option value={cat}>{cat}</option>
+          })
+         }
         </select>
       </div>
     </div>
