@@ -1,14 +1,26 @@
+import { auth } from "@/firebase";
+import { User } from "@/types/types";
+import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
-  const user = { _id:null, role: "admin"};
+interface propType{
+  user:User|null
+}
+
+const Header = ({user}:propType) => {
+ 
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleLogout=()=>(
-    setIsOpen(false)
-)
+  const handleLogout=async()=>{
+    try{
+      await signOut(auth)
+    }
+    catch(error){
+     throw error
+    }
+  }
 
   return (
     <nav className="border-b bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
