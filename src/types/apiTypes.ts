@@ -34,3 +34,8 @@ export type SearchProductRequest={
     category?:string,
     page?:number
 }
+
+export type NewProductRequest={
+    id:string,
+    formData:FormData
+}

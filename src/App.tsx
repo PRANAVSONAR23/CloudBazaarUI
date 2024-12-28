@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import Header from "./components/custom/Header";
 import { onAuthStateChanged } from "firebase/auth";
@@ -9,6 +9,10 @@ import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { UserReducerInitialState } from "./types/reducer-types";
 import Loader from "./components/custom/Loader";
 import ProtectedRoute from "./components/custom/ProtectedRoute";
+import Sidebar from "./components/custom/Sidebar";
+import DashBoard from "./pages/DashBoard";
+import Products from "./pages/Products";
+import Costomer from "./pages/Costomer";
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -59,6 +63,24 @@ const App = () => {
 
 
           //admin routes
+          <Route
+  element={
+    <ProtectedRoute
+      isAuthenticated={!!user}
+      isAdmin={user?.role==='admin'?true:false}
+      adminOnly={true}
+    >
+      <div style={{ display: "flex" }}>
+        <Sidebar />
+        <Outlet />
+      </div>
+    </ProtectedRoute>
+  }
+>
+  <Route path="/admin/dashboard" element={<DashBoard />} />
+  <Route path="/admin/costomer" element={<Costomer />} />
+  <Route path="/admin/products" element={<Products />} />
+</Route>
           
         </Routes>
       </Suspense>
