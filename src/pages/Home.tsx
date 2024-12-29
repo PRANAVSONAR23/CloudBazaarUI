@@ -1,12 +1,22 @@
 import Loader from "@/components/custom/Loader";
 import ProductCard from "@/components/custom/ProductCard";
 import { useLatestProductsQuery } from "@/redux/api/productAPI";
+import { addToCart } from "@/redux/reducer/cartReducer";
+import { CartItem } from "@/types/types";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   const { data, isError, isLoading } = useLatestProductsQuery("");
 
-  const addToCartHandler = () => {};
+const dispatch =useDispatch()
+
+  const addToCartHandler = (cartItem:CartItem) => {
+    if(cartItem.stock<1) return alert("Out of Stock")
+    
+    dispatch(addToCart(cartItem)) 
+    return undefined
+  };
 
   if (isError) {
     return <h1>Something went wrong</h1>;

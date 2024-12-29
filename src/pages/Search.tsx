@@ -4,8 +4,23 @@ import { useSearchProductsQuery } from "@/redux/api/productAPI";
 import ProductCard from "@/components/custom/ProductCard";
 import Pagination from "@/components/custom/Pagination";
 import Loader from "@/components/custom/Loader";
+import { useDispatch } from "react-redux";
+import { CartItem } from "@/types/types";
+import { addToCart } from "@/redux/reducer/cartReducer";
 
 const Search: React.FC = () => {
+
+  const dispatch =useDispatch()
+
+  const addToCartHandler = (cartItem:CartItem) => {
+    if(cartItem.stock<1) return alert("Out of Stock")
+    
+    dispatch(addToCart(cartItem)) 
+    return undefined
+  };
+
+
+
   const [filters, setFilters] = useState({
     sortBy: "asc",
     priceRange: [0, 1000],
@@ -18,7 +33,7 @@ const Search: React.FC = () => {
     setFilters(newFilters);
   };
 
-  const view = () => {};
+  
 
   const { data ,isLoading,isError} = useSearchProductsQuery({
     search: searchQuery,
@@ -66,7 +81,7 @@ const Search: React.FC = () => {
                   price={p.price}
                   photo={p.photo}
                   stock={p.stock}
-                  handler={view}
+                  handler={addToCartHandler}
                 />
               ))}
             </div>

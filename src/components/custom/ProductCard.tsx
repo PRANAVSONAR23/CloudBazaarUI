@@ -1,4 +1,5 @@
 import { server } from "@/redux/store";
+import { CartItem } from "@/types/types";
 
 type ProductsProp = {
     productId: string;
@@ -6,7 +7,7 @@ type ProductsProp = {
     name: string;
     price: number;
     stock: number;
-    handler: () => void;
+    handler: (cartItem:CartItem) => string|undefined|void;
   };
   
   const ProductCard = ({
@@ -45,7 +46,7 @@ type ProductsProp = {
   
         {/* Add to Cart Button */}
         <button
-          onClick={()=>handler()}
+          onClick={()=>handler({productId,price,stock,name,photo,quantity:1})}
           disabled={stock === 0}
           className={`mt-4 w-full py-2 rounded-lg text-white ${
             stock > 0

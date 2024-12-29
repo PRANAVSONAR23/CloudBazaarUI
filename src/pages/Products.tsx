@@ -17,6 +17,7 @@ const Products = () => {
 
   const view = (productId: string) => {
     navigate(`/admin/products/${productId}`);
+    return undefined
   };
 
   if (isLoading) return <Loader />;
