@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { CartReducerInitialState } from '@/types/reducer-types';
 
 // Sample country and state data (you'd typically fetch this from an API)
 const countries = [
@@ -35,6 +37,10 @@ interface AddressFormData {
 }
 
 const Shipping: React.FC = () => {
+
+
+  const {cartItems}=useSelector((state:{cartReducer:CartReducerInitialState})=>state.cartReducer);
+
 
 const navigate=useNavigate()
 
@@ -86,6 +92,13 @@ const navigate=useNavigate()
       alert('Failed to submit address');
     }
   };
+
+
+ useEffect(() => {
+    if(cartItems.length<=0){
+      navigate('/cart')
+    }
+  }, []);
 
   return (
     <div className='relative'>

@@ -51,7 +51,19 @@ export const cartReducer=createSlice({
             state.total =
               state.subTotal + state.tax + state.shippingCharges - state.discount;
           },
+
+          discountApplied: (state, action: PayloadAction<number>) => {
+            state.discount = action.payload;
+          },
+          
+        //   saveCoupon: (state, action: PayloadAction<string>) => {
+        //     state.coupon = action.payload;
+        //   }, 
+        //   saveShippingInfo: (state, action: PayloadAction<ShippingInfo>) => {
+        //     state.shippingInfo = action.payload;
+        //   },
+          resetCart: () => initialState, 
     }
 })
 
-export const {addToCart,removeCartItem,calculatePrice}=cartReducer.actions
+export const {addToCart,removeCartItem,calculatePrice,discountApplied}=cartReducer.actions

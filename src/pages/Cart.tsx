@@ -1,9 +1,12 @@
 import CartItemCard from "@/components/custom/CartItem"
-import { addToCart, calculatePrice, removeCartItem } from "@/redux/reducer/cartReducer"
+import { addToCart, calculatePrice, discountApplied, removeCartItem, } from "@/redux/reducer/cartReducer"
+import { server } from "@/redux/store"
 import { CartReducerInitialState } from "@/types/reducer-types"
 import { CartItem } from "@/types/types"
+import axios from "axios"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const Cart = () => {
 
@@ -31,6 +34,34 @@ const Cart = () => {
      useEffect(()=>{
       dispatch(calculatePrice())
      },[cartItems])
+
+     useEffect(() => {
+        const { token: cancelToken, cancel } = axios.CancelToken.source();
+
+        const timeOutID = setTimeout(() => {
+          axios
+            .get(`${server}/api/v1/payment/apply/discount?coupon=${couponCode}`, {
+              cancelToken,
+            })
+            .then((res) => {
+              dispatch(discountApplied(res.data.discount));
+            //   dispatch(saveCoupon(couponCode));
+              setIsValidCode(true);
+              dispatch(calculatePrice());
+            })
+            .catch(() => {
+              dispatch(discountApplied(0));
+              setIsValidCode(false);
+              dispatch(calculatePrice());
+            });
+        }, 1000);
+    
+        return () => {
+          clearTimeout(timeOutID);
+          cancel();
+          setIsValidCode(false);
+        };
+      }, [couponCode]);
    
 
   return (
@@ -52,17 +83,35 @@ const Cart = () => {
         {/* total price section */}
         <div className="w-[30%] bg-blue-400">
         <div className="p-3">
-            <h3>Subtotal:{subTotal}</h3>
-            <h4>Shipping charge:{shippingCharges}</h4>
-            <h4>Tax:{tax}</h4>
-            <h4>Discount:{discount}</h4>
-            <h2>Total:{total}</h2>
+        <p>Subtotal: ₹{subTotal}</p>
+        <p>Shipping Charges: ₹{shippingCharges}</p>
+        <p>Tax: ₹{tax}</p>
+        <p>
+          Discount: <em className="red"> - ₹{discount}</em>
+        </p>
+        <p>
+          <b>Total: ₹{total}</b>
+        </p>
 
-            <input type="text" placeholder="Enter coupon code" value={couponCode} onChange={(e)=>setCouponCode(e.target.value)} />
-            <button onClick={()=>setIsValidCode(true)}>Apply</button>
-            {
-                couponCode && (isValidCode ? <span>Redeem coupon code</span> : <span>Invalid coupon code</span>)
-            }
+        <input
+          type="text"
+          placeholder="Coupon Code"
+          value={couponCode}
+          onChange={(e) => setCouponCode(e.target.value)}
+        />
+
+        {couponCode &&
+          (isValidCode ? (
+            <span className="green">
+              ₹{discount} off using the <code>{couponCode}</code>
+            </span>
+          ) : (
+            <span className="red">
+              Invalid Coupon icon
+            </span>
+          ))}
+
+        {cartItems.length > 0 && <Link to="/shipping">Checkout</Link>}
 
         </div>
         </div>
