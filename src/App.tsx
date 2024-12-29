@@ -20,6 +20,8 @@ import Products from "./pages/Products";
 import Costomer from "./pages/Costomer";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import AddNewProduct from "./pages/AddNewProduct";
+import ProductDetails from "./pages/ProductDetails";
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -102,7 +104,8 @@ const App = () => {
             <Route path="/admin/dashboard" element={<DashBoard />} />
             <Route path="/admin/costomer" element={<Costomer />} />
             <Route path="/admin/products" element={<Products />} />
-
+            <Route path="/admin/products/add-product" element={<AddNewProduct />} />
+            <Route path="/admin/products/:id" element={<ProductDetails/>} />
 
 
           </Route>
