@@ -30,7 +30,7 @@ const items = [
   },
   {
     title: "Transaction",
-    url: "/admin/transaction",
+    url: "/admin/transactions",
     icon: Search,
   },
 ]

@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const productAPI = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/product/` }), // Corrected strin
-  tagTypes: ["product"],
+  tagTypes: ["product","allProduct"],
   endpoints: (builder) => ({
     latestProducts: builder.query<AllProductResponse, string>({
       query: () => "latest",
@@ -56,7 +56,7 @@ export const productAPI = createApi({
         method: "DELETE",
        
       }),
-      invalidatesTags: ["product"],
+      invalidatesTags: ["allProduct"],
     }),  
   }),
 });

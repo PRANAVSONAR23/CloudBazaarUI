@@ -22,6 +22,9 @@ import Costomer from "./pages/Costomer";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AddNewProduct from "./pages/AddNewProduct";
 import ProductDetails from "./pages/ProductDetails";
+import AllTransactionsPage from "./pages/Transactions";
+import ManageTransaction from "./pages/ManageTransaction";
+import PageNotFound from "./pages/PageNotFound";
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -106,11 +109,12 @@ const App = () => {
             <Route path="/admin/products" element={<Products />} />
             <Route path="/admin/products/add-product" element={<AddNewProduct />} />
             <Route path="/admin/products/:id" element={<ProductDetails/>} />
-
+            <Route path="/admin/transactions" element={<AllTransactionsPage/>} />
+            <Route path="/admin/transactions/:id" element={<ManageTransaction/>} />
 
           </Route>
 
-
+      <Route path="*" element={<PageNotFound/>}/>
         </Routes>
       </Suspense>
     </Router>
