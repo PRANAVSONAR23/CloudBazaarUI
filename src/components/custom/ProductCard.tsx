@@ -1,7 +1,7 @@
 import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { ShoppingCart, Eye } from 'lucide-react';
 
 type ProductsProp = {
@@ -10,7 +10,7 @@ type ProductsProp = {
   name: string;
   price: number;
   stock: number;
-  handler: (cartItem: CartItem) => string | undefined | void;
+  handler: (cartItem: CartItem) => string | undefined | void |ReactElement |any
 };
 
 const   ProductCard = ({

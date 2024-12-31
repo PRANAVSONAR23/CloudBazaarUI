@@ -7,15 +7,26 @@ import Loader from "@/components/custom/Loader";
 import { useDispatch } from "react-redux";
 import { CartItem } from "@/types/types";
 import { addToCart } from "@/redux/reducer/cartReducer";
+import { useToast } from "@/hooks/use-toast";
 
 const Search: React.FC = () => {
   const dispatch = useDispatch();
 
+  const { toast } = useToast()
+
   const addToCartHandler = (cartItem: CartItem) => {
-    if (cartItem.stock < 1) return alert("Out of Stock");
+    if (cartItem.stock < 1) return toast({
+      variant: "destructive",
+      title: "Product Out of Stock",
+      description: "This product is out of stock. Please check back later.",
+    })
 
     dispatch(addToCart(cartItem));
-    return undefined;
+    return toast({
+      
+      title: "Success 🎉",
+      description: "Product added to cart successfully",
+    });
   };
 
   const [filters, setFilters] = useState({
@@ -79,13 +90,13 @@ const Search: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
       <div className="container mx-auto grid grid-cols-4 gap-6">
         {/* Left Sidebar - Filter Section */}
-        <div className="col-span-1 bg-gray-800 p-5 shadow-lg rounded-lg text-white">
-          <h2 className="text-xl font-bold mb-4">Filters</h2>
+        <div className="col-span-1 bg-gray-900 p-5 shadow-lg rounded-lg text-white">
+         
           <FilterSection filters={filters} onFiltersChange={handleFiltersChange} />
         </div>
 
         {/* Main Content - Product List */}
-        <div className="col-span-3 bg-gray-800 p-6 shadow-lg rounded-lg text-white">
+        <div className="col-span-3 bg-gray-900 p-6 shadow-lg rounded-lg text-white">
           <div className="mb-6">
             <input
               type="text"
@@ -96,7 +107,7 @@ const Search: React.FC = () => {
             />
           </div>
           {isLoading ? (
-            <Loader />
+            <Loader className="w-96 h-96" />
           ) : (
             <>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

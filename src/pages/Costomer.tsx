@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { UserReducerInitialState } from '@/types/reducer-types';
 import { useAllUsersQuery, useDeleteUserMutation } from '@/redux/api/userAPI';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const UsersPage: React.FC = () => {
   const { user } = useSelector((state: { userReducer: UserReducerInitialState }) => state.userReducer);
@@ -14,13 +15,24 @@ const UsersPage: React.FC = () => {
   const { data } = useAllUsersQuery(user?._id! || "");
   const [deleteHandler] = useDeleteUserMutation();
 
+  const { toast } = useToast()
+
   const handleDelete = async (id: string) => {
+
+    if(user?.role!=='admin')return
     const res = await deleteHandler({ userId: id!, adminUserId: user?._id! });
 
     if ('data' in res) {
-      alert(res?.data?.message);
+      toast({
+        title: "User Deleted",
+        description: `${res?.data?.message}`,
+      });
     } else {
-      alert(res?.error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: `${res.error}`,
+      });
     }
   };
 

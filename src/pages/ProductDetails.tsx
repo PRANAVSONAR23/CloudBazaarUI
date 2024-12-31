@@ -7,12 +7,13 @@ interface Product {
   photo: string;
 }
 
+import { useToast } from "@/hooks/use-toast";
 import { useDeleteProductMutation, useProductDetailsQuery, useUpdateProductMutation } from "@/redux/api/productAPI";
 import { server } from "@/redux/store";
 import { UserReducerInitialState } from "@/types/reducer-types";
 import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -24,6 +25,8 @@ const ProductDetailsPage: React.FC = () => {
   const { user } = useSelector(
     (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
+
+  const navigate=useNavigate()
 
   // Initialize states with empty values
   const [displayProduct, setDisplayProduct] = useState<Product>({
@@ -45,6 +48,7 @@ const ProductDetailsPage: React.FC = () => {
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { toast } = useToast()
 
   // Update states when data is available
   useEffect(() => {
@@ -93,14 +97,21 @@ const ProductDetailsPage: React.FC = () => {
     const res=await updateProduct({formData:submitFormData,userId:user?._id!,productId:data?.product._id!})
     console.log(res)    
     if(res.data?.message==='Product updated successfully'){
-        alert("Product updated successfully")
+        toast({
+            title: "Success 🎉",
+            description: "Product updated successfully",
+        })
     }
   };
 
   const handleDelete = async () => {
    const res=await deleteProduct({userId:user?._id!, productId:data?.product._id!})
    if(res.data?.message==='Product deleted successfully'){
-    alert("Product deleted successfully")
+    toast({
+        title: "Success 🎉",
+        description: "Product deleted successfully",
+    })
+    navigate(-1)
    }
   };
 

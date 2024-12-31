@@ -26,7 +26,7 @@ interface TransactionsTableProps {
 
 const OrderTable: React.FC<TransactionsTableProps> = ({ transactions }) => {
   return (
-    <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-8 bg-black text-white ">
+    <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-8 bg-gray-900  text-white ">
       <h1 className="text-3xl font-bold text-blue-500 mb-6">All Orders</h1>
       <div className="overflow-x-auto bg-gray-900 shadow-lg rounded-lg">
         <table className="min-w-full divide-y divide-gray-700">

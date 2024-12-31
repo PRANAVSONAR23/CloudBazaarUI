@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { CartReducerInitialState } from '@/types/reducer-types';
+import { useToast } from '@/hooks/use-toast';
 
 // Sample country and state data (you'd typically fetch this from an API)
 const countries = [
@@ -72,6 +73,7 @@ const Shipping: React.FC = () => {
       }));
     }
   };
+  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,14 +81,16 @@ const Shipping: React.FC = () => {
     try {
       // Replace with your actual backend endpoint
       const response = await axios.post('/api/submit-address', formData);
+      toast({
+        title: "Address submitted successfully!",
+      })
       
-      // Handle successful submission
-      console.log('Submission successful', response.data);
-      alert('Address submitted successfully!');
     } catch (error) {
       // Handle submission error
-      console.error('Submission error', error);
-      alert('Failed to submit address');
+      toast({
+        variant: "destructive", 
+        title: "Error submitting address!",
+      })
     }
   };
 

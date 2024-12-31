@@ -4,6 +4,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { useSelector } from 'react-redux'
 import { UserReducerInitialState } from '@/types/reducer-types'
 import { useLineQuery } from '@/redux/api/dashboardAPI'
+import Loader from "@/components/custom/Loader"
 
 interface ChartData {
   month: string;
@@ -54,7 +55,7 @@ export default function LineGraphPage() {
   )
 
   const { data, isLoading, isError } = useLineQuery(user?._id!)
-  if (isLoading) return <div className="text-white text-center">Loading...</div>
+  if (isLoading) return  <Loader className="w-96 h-96" />
   if (isError) return <div className="text-red-500 text-center">Error fetching data</div>
   if (!data?.lineChart) return <div className="text-gray-500 text-center">No data available</div>
 

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useNewProductMutation } from '@/redux/api/productAPI';
 import { useSelector } from 'react-redux';
 import { UserReducerInitialState } from '@/types/reducer-types';
+import { useToast } from '@/hooks/use-toast';
 
 interface FormData {
   name: string;
@@ -67,9 +68,13 @@ const AddProductForm = () => {
 
     const res = await newProduct({ id: user?._id!, formData: productFormData });
 
-    console.log(res);
+    const { toast } = useToast()
+
     if (res?.data?.message === 'Product created successfully') {
-      alert(res.data.message);
+      toast({
+        title: 'Product added successfully 🎉',
+        description: `Product ${formData.name} has been added successfully`,
+      });
     }
 
     // Reset form after submission

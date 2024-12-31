@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import Loader from "@/components/custom/Loader"
 
 const Dashboard = () => {
   const { user } = useSelector(
@@ -13,7 +14,7 @@ const Dashboard = () => {
 
   const { data, isLoading, isError } = useStatsQuery(user?._id!)
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return  <Loader className="w-96 h-96" />
   if (isError) return <div>Error fetching data</div>
 
   const stats = data?.stats

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { UserReducerInitialState } from '@/types/reducer-types'
 import { useDeleteOrderMutation, useUpdateOrderMutation } from '@/redux/api/orderApi'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '@/hooks/use-toast'
 
 interface OrderItem {
   name: string
@@ -47,6 +48,8 @@ const OrderDetailsPage: FC<OrderDetailsProps> = ({ order }) => {
 
 const navigate=useNavigate()
 
+const { toast } = useToast()
+
     const { user } = useSelector(
         (state: { userReducer: UserReducerInitialState }) => state.userReducer
       );
@@ -57,19 +60,33 @@ const navigate=useNavigate()
   const handleUpdate = () => {
    const res=updateOrder({orderId:order?._id!,userId:user?._id!})
   res.then((data)=>{
-    alert(data.data?.message)
+    toast({
+      title: "Order Processed",
+      description:`${data.data?.message}`,
+    })
   }).catch((err)=>{
-    alert(err)  
+    toast({
+      variant: "destructive",
+      title: "ERROR",
+      description: `${err}`,
+    })
   })
   }
 
   const handleDelete = () => {
    const res=deleteOrder({orderId:order?._id!, userId:user?._id!})
    res.then((data)=>{
-    alert(data.data?.message)
+    toast({
+      title: "Deleted Order",
+      description:`${data.data?.message}`,
+    })
     navigate(-1)
   }).catch((err)=>{
-    alert(err)  
+    toast({
+      variant: "destructive",
+      title: "ERROR",
+      description: `${err}`,
+    }) 
   })
   }
 

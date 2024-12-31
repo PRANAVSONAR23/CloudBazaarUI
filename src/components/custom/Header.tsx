@@ -1,7 +1,7 @@
 import { auth } from "@/firebase";
 import { User } from "@/types/types";
 import { signOut } from "firebase/auth";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 interface propType {
@@ -10,6 +10,7 @@ interface propType {
 
 const Header = ({ user }: propType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
     try {
@@ -18,6 +19,20 @@ const Header = ({ user }: propType) => {
       throw error;
     }
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className=" bg-gray-900 text-white px-6 flex justify-between items-center shadow-lg ">
@@ -53,11 +68,18 @@ const Header = ({ user }: propType) => {
         >
           Cart
         </Link>
+        <Link
+          to="/orders"
+          className="hover:text-blue-400 transition font-medium"
+          onClick={() => setIsOpen(false)}
+        >
+          Orders
+        </Link>
       </div>
 
       {/* User Section */}
       {user?._id ? (
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsOpen((prev) => !prev)}
             className="bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-500 transition font-medium"
@@ -66,27 +88,19 @@ const Header = ({ user }: propType) => {
           </button>
           {isOpen && (
             <div
-              className="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg p-4 z-10"
-              onBlur={() => setIsOpen(false)}
+              className="absolute right-0 mt-2 w-60 bg-gray-800 rounded shadow-lg p-4 z-10"
             >
               {user.role === "admin" && (
                 <Link
                   to="/admin/dashboard"
-                  className="block py-2 px-4 hover:bg-gray-700 rounded font-medium"
+                  className="block py-2 px-4 hover:bg-gray-700 rounded font-medium text-center"
                   onClick={() => setIsOpen(false)}
                 >
                   Admin Dashboard
                 </Link>
               )}
-              <Link
-                to="/orders"
-                className="block py-2 px-4 hover:bg-gray-700 rounded font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Orders
-              </Link>
               <button
-                className="w-full text-left py-2 px-4 bg-red-600 text-white hover:bg-red-500 rounded font-medium mt-2"
+                className="w-full text-center py-2 px-4 bg-red-600 text-white hover:bg-red-500 rounded font-medium mt-2"
                 onClick={handleLogout}
               >
                 Logout

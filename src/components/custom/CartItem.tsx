@@ -1,6 +1,8 @@
 import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { Link } from "react-router-dom";
+import {Plus,Minus} from 'lucide-react'
+
 
 type CartItemProps = {
   cartItem: CartItem;
@@ -18,7 +20,7 @@ const CartItemCard = ({
   const { productId, photo, name, price, quantity } = cartItem;
 
   return (
-    <div className="flex items-center gap-6 p-6 bg-black text-white rounded-lg shadow-xl">
+    <div className="flex items-center gap-6 p-6 bg-gray-900 text-white rounded-lg shadow-xl">
       {/* Product Image */}
       <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden">
         <img
@@ -45,14 +47,14 @@ const CartItemCard = ({
           className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 text-white"
           onClick={() => decrementHandler(cartItem)}
         >
-          -
+          <Minus/>
         </button>
         <p className="w-8 text-center text-lg font-semibold text-gray-300">{quantity}</p>
         <button
           className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 text-white"
           onClick={() => incrementHandler(cartItem)}
         >
-          +
+        <Plus/>
         </button>
       </div>
 

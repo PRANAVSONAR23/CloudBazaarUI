@@ -5,17 +5,29 @@ import { addToCart } from "@/redux/reducer/cartReducer";
 import { CartItem } from "@/types/types";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast"
+
 
 const Home = () => {
   const { data, isError, isLoading } = useLatestProductsQuery("");
 
   const dispatch = useDispatch();
 
+  const { toast } = useToast()
+
   const addToCartHandler = (cartItem: CartItem) => {
-    if (cartItem.stock < 1) return alert("Out of Stock");
+    if (cartItem.stock < 1) return toast({
+      variant: "destructive",
+      title: "Product Out of Stock",
+      description: "This product is out of stock. Please check back later.",
+    })
 
     dispatch(addToCart(cartItem));
-    return undefined;
+    return toast({
+      
+      title: "Success 🎉",
+      description: "Product added to cart successfully",
+    });
   };
 
   if (isError) {
@@ -47,8 +59,8 @@ const Home = () => {
       <main className="w-full p-8">
         <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {isLoading ? (
-            <div className="col-span-full flex justify-center items-center">
-              <Loader />
+            <div className="col-span-full flex justify-center items-center ">
+              <Loader className="w-96 h-96"/>
             </div>
           ) : (
             data?.products.map((pro) => (

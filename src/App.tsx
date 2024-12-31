@@ -12,22 +12,24 @@ import { getUser } from "./redux/api/userAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { UserReducerInitialState } from "./types/reducer-types";
-import Loader from "./components/custom/Loader";
+const Loader = lazy(() => import("./components/custom/Loader"));
 import ProtectedRoute from "./components/custom/ProtectedRoute";
 import {AppSidebar} from "./components/custom/Sidebar";
-import DashBoard from "./pages/DashBoard";
-import Products from "./pages/Products";
-import Costomer from "./pages/Costomer";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import AddNewProduct from "./pages/AddNewProduct";
-import ProductDetails from "./pages/ProductDetails";
-import AllTransactionsPage from "./pages/Transactions";
-import ManageTransaction from "./pages/ManageTransaction";
-import PageNotFound from "./pages/PageNotFound";
-import BarChartPage from "./pages/BarChartPage";
-import PieChartPage from "./pages/PieChartPage";
-import LineChartPage from "./pages/LineChartPage";
+const DashBoard = lazy(() => import("./pages/DashBoard"));
+const Products = lazy(() => import("./pages/Products"));
+const Costomer = lazy(() => import("./pages/Costomer"));
+
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { Toaster } from "./components/ui/toaster";
+const AddNewProduct = lazy(() => import("./pages/AddNewProduct"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const AllTransactionsPage = lazy(() => import("./pages/Transactions"));
+const ManageTransaction = lazy(() => import("./pages/ManageTransaction"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const PieChartPage = lazy(() => import("./pages/PieChartPage"));
+const LineChartPage = lazy(() => import("./pages/LineChartPage"));
+const BarChartPage = lazy(() => import("./pages/BarChartPage"));
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -56,11 +58,12 @@ const App = () => {
   }, []);
 
   return loading ? (
-    <Loader />
+    <Loader className="h-screen w-screen" />
   ) : (
     <Router>
+      <Toaster />
       <Header user={user} />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader className="h-screen w-screen"/>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />

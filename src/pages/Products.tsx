@@ -19,7 +19,7 @@ const Products = () => {
     navigate(`/admin/products/${productId}`);
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <Loader className="w-96 h-96" />;
   if (error) return <p className="text-center text-red-500">Failed to load products.</p>;
 
   return (

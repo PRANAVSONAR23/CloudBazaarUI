@@ -3,6 +3,7 @@ import { UserReducerInitialState } from "@/types/reducer-types";
 import { useSelector } from "react-redux";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Loader from "@/components/custom/Loader";
 
 interface DataPoint {
     name: string;
@@ -18,7 +19,7 @@ const PieChartPage = () => {
 
     const { data, isLoading, isError } = usePieQuery(user?._id!);
 
-    if (isLoading) return <div className="text-center text-lg text-white">Loading...</div>;
+    if (isLoading) return  <Loader className="w-96 h-96" />
     if (isError) return <div className="text-center text-lg text-red-500">Error fetching data</div>;
     if (!data?.pieChart) return <div className="text-center text-lg text-gray-400">No data available</div>;
 

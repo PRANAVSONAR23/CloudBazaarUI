@@ -12,6 +12,9 @@ export default {
 		  fontFamily: {
 			ubuntu: ['Ubuntu', 'sans-serif'], // Replace "Your Font Name"
 		  },
+
+		
+
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

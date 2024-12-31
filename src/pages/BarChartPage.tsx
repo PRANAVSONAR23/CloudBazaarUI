@@ -6,6 +6,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { useSelector } from 'react-redux'
 import { UserReducerInitialState } from '@/types/reducer-types'
 import { useBarQuery } from '@/redux/api/dashboardAPI'
+import Loader from '@/components/custom/Loader'
 
 // Define types for our data structure
 type ChartData = {
@@ -33,7 +34,7 @@ export default function BarChartPage() {
     
       const { data, isLoading, isError } = useBarQuery(user?._id!)
     
-      if (isLoading) return <div>Loading...</div>
+      if (isLoading) return  <Loader className="w-96 h-96" />
       if (isError) return <div>Error fetching data</div>
       
       if (!data?.barChart) return <div>No data available</div>;
