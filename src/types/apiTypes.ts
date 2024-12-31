@@ -1,4 +1,4 @@
-import { CartItem, Order, Product, ShippingType, User } from "./types"
+import { Bar, CartItem, Line, Order, Pie, Product, ShippingType, Stats, User } from "./types"
 
 export type MessageResponse={
     success: boolean,
@@ -8,6 +8,11 @@ export type MessageResponse={
 export type UserResponse ={
     success: boolean,
     user: User
+}
+
+export type AllUsersResponse={
+    success: boolean,
+    users: User[]
 }
 
 
@@ -83,4 +88,31 @@ export type OrderDetailsResponse={
 export type UpdateOrderRequest={
     userId:string,
     orderId:string,
+}
+
+
+export type DeleteUserRequest={
+    userId:string,
+    adminUserId:string,
+}
+
+
+export type StatsResponse={
+    success:boolean,
+    stats:Stats
+}
+
+export type PieResponse={
+    success:boolean,
+    pieChart:Pie
+}
+
+export type BarResponse={
+    success:boolean,
+    barChart:Bar
+}
+
+export type LineResponse={
+    success:boolean,
+    lineChart:Line
 }

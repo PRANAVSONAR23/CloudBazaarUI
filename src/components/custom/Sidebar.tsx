@@ -35,6 +35,25 @@ const items = [
   },
 ]
 
+const charts = [
+  {
+    title: "Bar chart",
+    url: "/admin/barchart",
+    icon: Home,
+  },
+  {
+    title: "Pie",
+    url: "/admin/pie",
+    icon: Inbox,
+  },
+  {
+    title: "Line",
+    url: "/admin/line",
+    icon: Calendar,
+  },
+  
+]
+
 export function AppSidebar() {
   return (
     <Sidebar>
@@ -62,7 +81,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Charts</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {charts.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>

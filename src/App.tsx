@@ -25,6 +25,9 @@ import ProductDetails from "./pages/ProductDetails";
 import AllTransactionsPage from "./pages/Transactions";
 import ManageTransaction from "./pages/ManageTransaction";
 import PageNotFound from "./pages/PageNotFound";
+import BarChartPage from "./pages/BarChartPage";
+import PieChartPage from "./pages/PieChartPage";
+import LineChartPage from "./pages/LineChartPage";
 
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
@@ -111,6 +114,9 @@ const App = () => {
             <Route path="/admin/products/:id" element={<ProductDetails/>} />
             <Route path="/admin/transactions" element={<AllTransactionsPage/>} />
             <Route path="/admin/transactions/:id" element={<ManageTransaction/>} />
+            <Route path="/admin/barchart" element={<BarChartPage />} />
+            <Route path="/admin/pie" element={<PieChartPage />} />
+            <Route path="/admin/line" element={<LineChartPage />} />
 
           </Route>
 
