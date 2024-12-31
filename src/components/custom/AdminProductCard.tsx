@@ -13,7 +13,7 @@ type ProductsProp = {
   handler: (cartItem: CartItem) => string | undefined | void;
 };
 
-const   ProductCard = ({
+const   AdminProductCard = ({
   productId,
   photo,
   name,
@@ -55,7 +55,7 @@ const   ProductCard = ({
 
       {/* Product Info */}
       <div className="p-4">
-        <h1 className="text-lg font-bold text-white truncate mb-1">{name}</h1>
+        <h1 className="text-lg font-bold text-white dark:text-white truncate mb-1">{name}</h1>
         <div className="flex justify-between items-center mb-2">
           <p className="text-xl font-extrabold text-white">
             ₹{price.toLocaleString()}
@@ -79,19 +79,15 @@ const   ProductCard = ({
           whileTap={{ scale: 0.98 }}
           onClick={() => handler({ productId, price, stock, name, photo, quantity: 1 })}
           disabled={stock === 0}
-          className={`w-full py-2 rounded-xl text-white font-semibold text-sm transition-all duration-300 ease-in-out flex items-center justify-center space-x-1 ${
-            stock > 0
-              ? "bg-blue-900 hover:from-blue-900 hover:to-gray-900"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
+          className={`w-full py-2 rounded-xl text-white font-semibold text-sm transition-all duration-300 ease-in-out flex items-center justify-center space-x-1 bg-blue-900 hover:to-gray-900`}
         >
-          <ShoppingCart size={16} />
-          <span>{stock > 0 ? "Add to Cart" : "Out of Stock"}</span>
+          
+          <span>View</span>
         </motion.button>
       </div>
     </motion.div>
   );
 };
 
-export default ProductCard;
+export default AdminProductCard;
 

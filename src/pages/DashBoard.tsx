@@ -1,4 +1,3 @@
-'use client'
 
 import { useStatsQuery } from "@/redux/api/dashboardAPI"
 import { UserReducerInitialState } from "@/types/reducer-types"
@@ -40,19 +39,19 @@ const Dashboard = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28']
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+    <div className="container mx-auto p-6 bg-gray-900 text-white  ">
+      <h1 className="text-4xl font-extrabold text-blue-500 mb-8">Dashboard</h1>
       
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-[60vw]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {cardData.map((card, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+          <Card key={index} className="bg-gray-800 border border-blue-600 rounded-lg shadow-lg transition duration-300 hover:scale-105">
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-lg font-semibold text-blue-400">{card.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-white">{card.value}</div>
+              <p className={`text-xs ${card.change! > 0 ? 'text-green-500' : 'text-red-500'}`}>
                 {card.change! > 0 ? '+' : ''}{card.change}% from last month
               </p>
             </CardContent>
@@ -61,17 +60,17 @@ const Dashboard = () => {
       </div>
 
       {/* Bar Chart */}
-      <Card className="mb-8 w-[60vw]">
+      <Card className="mb-8 bg-gray-800 border border-blue-600 rounded-lg shadow-lg">
         <CardHeader>
-          <CardTitle>Orders and Revenue (Last 6 Months)</CardTitle>
+          <CardTitle className="text-lg font-semibold text-blue-400">Orders and Revenue (Last 6 Months)</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+              <XAxis dataKey="month" stroke="#aaa" />
+              <YAxis yAxisId="left" stroke="#aaa" />
+              <YAxis yAxisId="right" orientation="right" stroke="#aaa" />
               <Tooltip />
               <Legend />
               <Bar yAxisId="left" dataKey="order" fill="#8884d8" name="Orders" />
@@ -82,9 +81,9 @@ const Dashboard = () => {
       </Card>
 
       {/* Pie Chart */}
-      <Card className="mb-8 w-[60vw]">
+      <Card className="mb-8 bg-gray-800 border border-blue-600 rounded-lg shadow-lg">
         <CardHeader>
-          <CardTitle>Category Distribution</CardTitle>
+          <CardTitle className="text-lg font-semibold text-blue-400">Category Distribution</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -110,24 +109,24 @@ const Dashboard = () => {
       </Card>
 
       {/* Latest Transactions Table */}
-      <Card className="w-[60vw] ">
+      <Card className="bg-gray-800 border border-blue-600 rounded-lg shadow-lg">
         <CardHeader>
-          <CardTitle>Latest Transactions</CardTitle>
+          <CardTitle className="text-lg font-semibold text-blue-400">Latest Transactions</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Discount</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Status</TableHead>
+              <TableRow className="hover:bg-black">
+                <TableHead className="text-blue-400 font-semibold text-base">ID</TableHead>
+                <TableHead className="text-blue-400 font-semibold text-base">Amount</TableHead>
+                <TableHead className="text-blue-400 font-semibold text-base">Discount</TableHead>
+                <TableHead className="text-blue-400 font-semibold text-base">Quantity</TableHead>
+                <TableHead className="text-blue-400 font-semibold text-base">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {stats?.latestTransactions?.map((transaction) => (
-                <TableRow key={transaction._id}>
+                <TableRow key={transaction._id} className="text-white ">
                   <TableCell>{transaction._id}</TableCell>
                   <TableCell>{transaction.amount}</TableCell>
                   <TableCell>{transaction.discount}</TableCell>
@@ -144,4 +143,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
@@ -11,8 +10,6 @@ interface ChartData {
   value: number;
 }
 
-
-
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const formatChartData = (data: number[]): ChartData[] => {
@@ -23,10 +20,10 @@ const formatChartData = (data: number[]): ChartData[] => {
 };
 
 const LineGraph = ({ data, title, color }: { data: ChartData[], title: string, color: string }) => (
-  <Card className="w-full">
+  <Card className="w-full bg-[#0f172a] border border-gray-700 rounded-lg shadow-lg">
     <CardHeader>
-      <CardTitle>{title}</CardTitle>
-      <CardDescription>Last 12 months</CardDescription>
+      <CardTitle className="text-lg font-semibold text-white">{title}</CardTitle>
+      <CardDescription className="text-sm text-gray-400">Last 12 months</CardDescription>
     </CardHeader>
     <CardContent>
       <ChartContainer
@@ -40,8 +37,8 @@ const LineGraph = ({ data, title, color }: { data: ChartData[], title: string, c
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <XAxis dataKey="month" />
-            <YAxis />
+            <XAxis dataKey="month" stroke="#94a3b8" />
+            <YAxis stroke="#94a3b8" />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} />
           </LineChart>
@@ -52,27 +49,20 @@ const LineGraph = ({ data, title, color }: { data: ChartData[], title: string, c
 );
 
 export default function LineGraphPage() {
- 
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  )
 
-    const { user } = useSelector(
-        (state: { userReducer: UserReducerInitialState }) => state.userReducer
-      )
-    
-      const { data, isLoading, isError } = useLineQuery(user?._id!)
-    
-      if (isLoading) return <div>Loading...</div>
-      if (isError) return <div>Error fetching data</div>
-      
-      if (!data?.lineChart) return <div>No data available</div>;
+  const { data, isLoading, isError } = useLineQuery(user?._id!)
+  if (isLoading) return <div className="text-white text-center">Loading...</div>
+  if (isError) return <div className="text-red-500 text-center">Error fetching data</div>
+  if (!data?.lineChart) return <div className="text-gray-500 text-center">No data available</div>
 
-      const lineChart = data?.lineChart
-  
-
- 
+  const lineChart = data?.lineChart
 
   return (
-    <div className="space-y-8 p-8">
-      <h1 className="text-3xl font-bold">Dashboard Analytics</h1>
+    <div className="space-y-8 p-8  min-h-screen">
+      
       <div className="grid gap-8 md:grid-cols-2">
         <LineGraph data={formatChartData(lineChart.product)} title="Products" color="#3b82f6" />
         <LineGraph data={formatChartData(lineChart.user)} title="Users" color="#22c55e" />
@@ -82,4 +72,3 @@ export default function LineGraphPage() {
     </div>
   );
 }
-

@@ -15,7 +15,7 @@ const AllTransactionsPage: React.FC = () => {
     const {data}=useAllOrdersQuery(user?._id!)
 
   return (
-    <div className=" bg-gray-100">
+    <div className=" bg-gray-900">
       {data?.orders && <TransactionsTable transactions={data.orders} />}
     </div>
   );

@@ -99,7 +99,7 @@ const App = () => {
                 <SidebarProvider>
                 <div className="flex justify-between">
                   <AppSidebar />
-                  <SidebarTrigger/>
+                  
                   <Outlet />
                 </div>
                 </SidebarProvider>
@@ -108,7 +108,7 @@ const App = () => {
             }
           >
             <Route path="/admin/dashboard" element={<DashBoard />} />
-            <Route path="/admin/costomer" element={<Costomer />} />
+            <Route path="/admin/costomers" element={<Costomer />} />
             <Route path="/admin/products" element={<Products />} />
             <Route path="/admin/products/add-product" element={<AddNewProduct />} />
             <Route path="/admin/products/:id" element={<ProductDetails/>} />

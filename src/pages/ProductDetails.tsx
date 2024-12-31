@@ -113,131 +113,119 @@ const ProductDetailsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Rest of your JSX remains the same */}
-          {/* Product Display Section */}
-          <div className="p-6 border-r border-gray-200">
-            <h2 className="text-2xl font-bold mb-6">Product Details</h2>
-            <div className="space-y-4">
-              <img
-                src={`${server}/${displayProduct.photo}`}
-                alt={displayProduct.name}
-                className="w-full max-w-md rounded-lg mb-4"
-              />
-              <div>
-                <span className="font-semibold">Name:</span>{" "}
-                {displayProduct.name}
-              </div>
-              <div>
-                <span className="font-semibold">Price:</span> $
-                {displayProduct.price}
-              </div>
-              <div>
-                <span className="font-semibold">Category:</span>{" "}
-                {displayProduct.category}
-              </div>
-              <div>
-                <span className="font-semibold">Stock:</span>{" "}
-                {displayProduct.stock} units
-              </div>
+    <div className="min-h-screen bg-gray-900 p-8 ">
+    <div className="max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden border">
+      <div className="grid grid-cols-1 md:grid-cols-2  p-1">
+        
+        {/* Product Display Section */}
+        <div className="p-6 bg-gray-900 text-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-4">Product Details</h2>
+          <div className="space-y-6">
+            <img
+              src={`${server}/${displayProduct.photo}`}
+              alt={displayProduct.name}
+              className="w-full max-w-md rounded-lg mb-4"
+            />
+            <div>
+              <span className="font-semibold text-lg">Name:</span> {displayProduct.name}
+            </div>
+            <div>
+              <span className="font-semibold text-lg">Price:</span> ${displayProduct.price}
+            </div>
+            <div>
+              <span className="font-semibold text-lg">Category:</span> {displayProduct.category}
+            </div>
+            <div>
+              <span className="font-semibold text-lg">Stock:</span> {displayProduct.stock} units
             </div>
           </div>
-
-          {/* Update Form Section */}
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-6">Update Product</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  step="0.01"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Category
-                </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="electronics">Electronics</option>
-                  <option value="clothing">Clothing</option>
-                  <option value="books">Books</option>
-                  <option value="food">Food</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Stock
-                </label>
-                <input
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Photo
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div className="flex space-x-4 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
-                >
-                  Update Product
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="flex-1 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200"
-                >
-                  Delete Product
-                </button>
-              </div>
-            </form>
-          </div>
+        </div>
+  
+        {/* Update Form Section */}
+        <div className="p-6 bg-gray-900 text-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-6">Update Product</h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+              />
+            </div>
+  
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                step="0.01"
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+              />
+            </div>
+  
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+              >
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books</option>
+                <option value="food">Food</option>
+              </select>
+            </div>
+  
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Stock</label>
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleInputChange}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+              />
+            </div>
+  
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Photo</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+              />
+            </div>
+  
+            <div className="flex space-x-4 pt-6">
+              <button
+                type="submit"
+                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition duration-200"
+              >
+                Update Product
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="flex-1 bg-red-600 text-white py-3 px-6 rounded-md hover:bg-red-700 focus:ring-2 focus:ring-red-500 transition duration-200"
+              >
+                Delete Product
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
+  
   );
 };
 

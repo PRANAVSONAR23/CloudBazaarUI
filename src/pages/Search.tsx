@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FilterSection from "../components/custom/FilterSection";
 import { useSearchProductsQuery } from "@/redux/api/productAPI";
 import ProductCard from "@/components/custom/ProductCard";
@@ -9,17 +9,14 @@ import { CartItem } from "@/types/types";
 import { addToCart } from "@/redux/reducer/cartReducer";
 
 const Search: React.FC = () => {
+  const dispatch = useDispatch();
 
-  const dispatch =useDispatch()
+  const addToCartHandler = (cartItem: CartItem) => {
+    if (cartItem.stock < 1) return alert("Out of Stock");
 
-  const addToCartHandler = (cartItem:CartItem) => {
-    if(cartItem.stock<1) return alert("Out of Stock")
-    
-    dispatch(addToCart(cartItem)) 
-    return undefined
+    dispatch(addToCart(cartItem));
+    return undefined;
   };
-
-
 
   const [filters, setFilters] = useState({
     sortBy: "asc",
@@ -33,9 +30,7 @@ const Search: React.FC = () => {
     setFilters(newFilters);
   };
 
-  
-
-  const { data ,isLoading,isError} = useSearchProductsQuery({
+  const { data, isLoading, isError } = useSearchProductsQuery({
     search: searchQuery,
     price: filters.priceRange[1],
     sort: filters.sortBy,
@@ -43,58 +38,90 @@ const Search: React.FC = () => {
     ...(filters.category !== "all" ? { category: filters.category } : {}),
   });
 
- if(isError){
-    return <h1>Something went wrong</h1>
+  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  // Debounce handler for the search input
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Clear the previous timeout
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    // Set a new timeout
+    const timeout = setTimeout(() => {
+      setSearchQuery(value);
+    }, 1000);
+
+    setDebounceTimeout(timeout);
+  };
+
+  useEffect(() => {
+    // Clean up the timeout on unmount or when query changes
+    return () => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+    };
+  }, [debounceTimeout]);
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-2xl text-red-500 font-semibold">Something went wrong</h1>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="container mx-auto grid grid-cols-4 gap-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+      <div className="container mx-auto grid grid-cols-4 gap-6">
         {/* Left Sidebar - Filter Section */}
-        <div className="col-span-1 bg-white p-4 shadow rounded">
-          <FilterSection
-            filters={filters}
-            onFiltersChange={handleFiltersChange}
-          />
+        <div className="col-span-1 bg-gray-800 p-5 shadow-lg rounded-lg text-white">
+          <h2 className="text-xl font-bold mb-4">Filters</h2>
+          <FilterSection filters={filters} onFiltersChange={handleFiltersChange} />
         </div>
 
         {/* Main Content - Product List */}
-        {
-          isLoading?<Loader/>:
-        <div className="col-span-3 bg-white p-4 shadow rounded">
-          <div className="mb-4">
+        <div className="col-span-3 bg-gray-800 p-6 shadow-lg rounded-lg text-white">
+          <div className="mb-6">
             <input
               type="text"
               placeholder="Search product by name"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={handleSearchChange} // Apply debouncing handler
+              className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <div className="grid grid-cols-2 gap-4">
-              {data?.products.map((p) => (
-                <ProductCard
-                  key={p._id}
-                  productId={p._id}
-                  name={p.name}
-                  price={p.price}
-                  photo={p.photo}
-                  stock={p.stock}
-                  handler={addToCartHandler}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {data?.products.map((p) => (
+                  <ProductCard
+                    key={p._id}
+                    productId={p._id}
+                    name={p.name}
+                    price={p.price}
+                    photo={p.photo}
+                    stock={p.stock}
+                    handler={addToCartHandler}
+                  />
+                ))}
+              </div>
+              {data && data?.totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  onPageChange={setCurrentPage}
+                  totalPages={data?.totalPages ? data.totalPages : 1}
                 />
-              ))}
-            </div>
-          </div>
-          {data && data?.totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-              totalPages={data?.totalPages ? data.totalPages : 1}
-            />
+              )}
+            </>
           )}
         </div>
-}
       </div>
     </div>
   );

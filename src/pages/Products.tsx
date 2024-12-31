@@ -1,5 +1,5 @@
+import AdminProductCard from "@/components/custom/AdminProductCard";
 import Loader from "@/components/custom/Loader";
-import ProductCard from "@/components/custom/ProductCard";
 import { Button } from "@/components/ui/button";
 import { useAllProductsQuery } from "@/redux/api/productAPI";
 import { UserReducerInitialState } from "@/types/reducer-types";
@@ -17,39 +17,45 @@ const Products = () => {
 
   const view = (productId: string) => {
     navigate(`/admin/products/${productId}`);
-    return undefined
   };
 
   if (isLoading) return <Loader />;
-  if (error) return <p>Failed to load products.</p>;
+  if (error) return <p className="text-center text-red-500">Failed to load products.</p>;
 
   return (
-    <div>
-      <div>
-        <Button onClick={() => navigate("/admin/products/add-product")}>
+    <div className="min-h-screen bg-gray-900 text-white p-6 w-[82vw]">
+      {/* Add Product Button */}
+      <div className="mb-6 flex justify-end">
+        <Button
+          onClick={() => navigate("/admin/products/add-product")}
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+        >
           Add Product
         </Button>
       </div>
 
-      <div>
-        <h1>All Products</h1>
-        <div>
-          {data?.products?.length ? (
-            data.products.map((p) => (
-              <ProductCard
-                key={p._id}
-                productId={p._id}
-                name={p.name}
-                price={p.price}
-                photo={p.photo}
-                stock={p.stock}
-                handler={() => view(p._id)}
-              />
-            ))
-          ) : (
-            <p>No products available.</p>
-          )}
-        </div>
+      {/* Page Title */}
+      <div className="mb-8 ">
+        <h1 className="text-3xl font-semibold text-blue-400">All Products</h1>
+      </div>
+
+      {/* Product List */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data?.products?.length ? (
+          data.products.map((p) => (
+            <AdminProductCard
+              key={p._id}
+              productId={p._id}
+              name={p.name}
+              price={p.price}
+              photo={p.photo}
+              stock={p.stock}
+              handler={() => view(p._id)}
+            />
+          ))
+        ) : (
+          <p className="text-center text-gray-400">No products available.</p>
+        )}
       </div>
     </div>
   );

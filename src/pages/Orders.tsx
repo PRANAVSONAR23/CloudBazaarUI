@@ -19,8 +19,8 @@ const Orders: React.FC = () => {
   const {data} =useMyOrdersQuery(user?._id!)
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-4">MY ORDERS</h1>
+    <div className="p-6 bg-gradient-to-r from-blue-800 via-blue-950 to-gray-900 min-h-screen">
+      
       <div className="overflow-x-auto">
       {data?.orders && <OrderTable transactions={data.orders} />}
       </div>

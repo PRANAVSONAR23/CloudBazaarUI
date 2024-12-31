@@ -9,31 +9,49 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const { data, isError, isLoading } = useLatestProductsQuery("");
 
-const dispatch =useDispatch()
+  const dispatch = useDispatch();
 
-  const addToCartHandler = (cartItem:CartItem) => {
-    if(cartItem.stock<1) return alert("Out of Stock")
-    
-    dispatch(addToCart(cartItem)) 
-    return undefined
+  const addToCartHandler = (cartItem: CartItem) => {
+    if (cartItem.stock < 1) return alert("Out of Stock");
+
+    dispatch(addToCart(cartItem));
+    return undefined;
   };
 
   if (isError) {
-    return <h1>Something went wrong</h1>;
+    return (
+      <h1 className="text-center text-red-500 text-2xl font-bold">
+        Something went wrong
+      </h1>
+    );
   }
-  return (
-    <div>
-      <div className="w-full flex justify-between gap-10 item-center px-40 py-10 ">
-        <h1 className="text-2xl font-semibold">Latest Product</h1>
-        <Link to={"/search"}>More</Link>
-      </div>
 
-      <div className="w-full p-10 flex justify-between items-center flex-wrap gap-4">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          data?.products.map((pro) => {
-            return (
+  return (
+    <div className="bg-gray-900 min-h-screen">
+      {/* Header Section */}
+      <header className="bg-gray-900 text-white py-6 px-10 shadow-md">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-3xl font-bold tracking-wide">
+            Discover the Latest Products
+          </h1>
+          <Link
+            to="/search"
+            className="bg-blue-500 text-white px-6 py-2 rounded-full text-lg font-medium shadow-md hover:bg-blue-400 transition"
+          >
+            View More
+          </Link>
+        </div>
+      </header>
+
+      {/* Product Section */}
+      <main className="w-full p-8">
+        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {isLoading ? (
+            <div className="col-span-full flex justify-center items-center">
+              <Loader />
+            </div>
+          ) : (
+            data?.products.map((pro) => (
               <ProductCard
                 key={pro._id}
                 productId={pro._id}
@@ -43,10 +61,17 @@ const dispatch =useDispatch()
                 stock={pro.stock}
                 handler={addToCartHandler}
               />
-            );
-          })
-        )}
-      </div>
+            ))
+          )}
+        </div>
+      </main>
+
+      {/* Footer Section */}
+      {/* <footer className="bg-gradient-to-r from-black via-gray-900 to-gray-800 text-gray-300 py-6">
+        <div className="container mx-auto text-center">
+          <p className="text-sm">&copy; 2024 CoolApp. All rights reserved.</p>
+        </div>
+      </footer> */}
     </div>
   );
 };

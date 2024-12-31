@@ -4,18 +4,23 @@ import { Link } from "react-router-dom";
 
 type CartItemProps = {
   cartItem: CartItem;
-  incrementHandler:(cartItem:CartItem)=>void
-  decrementHandler:(cartItem:CartItem)=>void
-  removeHandler:(id:string)=>void
+  incrementHandler: (cartItem: CartItem) => void;
+  decrementHandler: (cartItem: CartItem) => void;
+  removeHandler: (id: string) => void;
 };
 
-const CartItemCard = ({ cartItem ,incrementHandler,decrementHandler,removeHandler }: CartItemProps) => {
+const CartItemCard = ({
+  cartItem,
+  incrementHandler,
+  decrementHandler,
+  removeHandler,
+}: CartItemProps) => {
   const { productId, photo, name, price, quantity } = cartItem;
 
   return (
-    <div className="flex items-center gap-6 p-4 bg-white shadow-md rounded-lg hover:shadow-lg transition">
+    <div className="flex items-center gap-6 p-6 bg-black text-white rounded-lg shadow-xl">
       {/* Product Image */}
-      <div className="w-24 h-24 bg-gray-200 rounded overflow-hidden">
+      <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden">
         <img
           src={`${server}/${photo}`}
           alt={`${name} photo`}
@@ -27,25 +32,25 @@ const CartItemCard = ({ cartItem ,incrementHandler,decrementHandler,removeHandle
       <div className="flex flex-col flex-grow gap-2">
         <Link
           to={`/product/${productId}`}
-          className="text-lg font-semibold text-gray-800 hover:text-blue-500 transition"
+          className="text-lg font-semibold text-blue-500 hover:text-blue-300"
         >
           {name}
         </Link>
-        <h1 className="text-gray-600">₹{price}</h1>
+        <h1 className="text-xl text-gray-400 font-medium">₹{price}</h1>
       </div>
 
       {/* Quantity Controls */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <button
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 hover:bg-gray-400 text-gray-800 transition"
-          onClick={()=>decrementHandler(cartItem)}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 text-white"
+          onClick={() => decrementHandler(cartItem)}
         >
           -
         </button>
-        <p className="w-6 text-center text-gray-800">{quantity}</p>
+        <p className="w-8 text-center text-lg font-semibold text-gray-300">{quantity}</p>
         <button
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 hover:bg-gray-400 text-gray-800 transition"
-          onClick={()=>incrementHandler(cartItem)}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 text-white"
+          onClick={() => incrementHandler(cartItem)}
         >
           +
         </button>
@@ -53,10 +58,10 @@ const CartItemCard = ({ cartItem ,incrementHandler,decrementHandler,removeHandle
 
       {/* Delete Button */}
       <button
-        className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        onClick={()=>removeHandler(productId)}
+        className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        onClick={() => removeHandler(productId)}
       >
-        Delete
+        Remove
       </button>
     </div>
   );
