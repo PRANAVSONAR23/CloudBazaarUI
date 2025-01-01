@@ -58,7 +58,7 @@ const   AdminProductCard = ({
         <h1 className="text-lg font-bold text-white dark:text-white truncate mb-1">{name}</h1>
         <div className="flex justify-between items-center mb-2">
           <p className="text-xl font-extrabold text-white">
-            ₹{price.toLocaleString()}
+          ${price.toLocaleString()}
           </p>
           <div>
             {stock > 0 ? (

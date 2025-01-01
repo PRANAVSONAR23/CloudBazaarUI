@@ -96,13 +96,13 @@ const navigate=useNavigate()
           </th>
         </tr>
       </thead>
-      <tbody className="bg-gray-900 divide-y divide-gray-700">
+      <tbody className="bg-gray-900 divide-y divide-gray-700 ">
         {transactions.map((transaction) => (
-          <tr key={transaction._id}>
+          <tr key={transaction._id} >
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {transaction._id.slice(-6)}
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap truncate max-w-28">
               <div className="text-sm font-semibold text-white">
                 {transaction.orderItems[0]?.name}
               </div>
@@ -132,9 +132,9 @@ const navigate=useNavigate()
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {new Date(transaction.createdAt!).toLocaleDateString()}
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {`${transaction.shippingInfo.address}, ${transaction.shippingInfo.city}, ${transaction.shippingInfo.state}, ${transaction.shippingInfo.country} ${transaction.shippingInfo.pincode}`}
-            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 truncate max-w-64" title={`${transaction.shippingInfo.address}, ${transaction.shippingInfo.city}, ${transaction.shippingInfo.state}, ${transaction.shippingInfo.country} ${transaction.shippingInfo.pincode}`}>
+  {`${transaction.shippingInfo.address}, ${transaction.shippingInfo.city}, ${transaction.shippingInfo.state}, ${transaction.shippingInfo.country} ${transaction.shippingInfo.pincode}`}
+</td>
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button
                 className="text-white hover:text-blue-500 bg-blue-600 rounded-md p-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"

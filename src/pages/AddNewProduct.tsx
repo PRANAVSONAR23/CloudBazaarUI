@@ -7,6 +7,7 @@ import { useNewProductMutation } from '@/redux/api/productAPI';
 import { useSelector } from 'react-redux';
 import { UserReducerInitialState } from '@/types/reducer-types';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   name: string;
@@ -52,7 +53,9 @@ const AddProductForm = () => {
   const { user } = useSelector((state: { userReducer: UserReducerInitialState }) => state.userReducer);
 
   const [newProduct] = useNewProductMutation();
+  const { toast } = useToast()
 
+  const navigate=useNavigate()
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -68,13 +71,14 @@ const AddProductForm = () => {
 
     const res = await newProduct({ id: user?._id!, formData: productFormData });
 
-    const { toast } = useToast()
+    
 
     if (res?.data?.message === 'Product created successfully') {
       toast({
         title: 'Product added successfully 🎉',
         description: `Product ${formData.name} has been added successfully`,
       });
+      navigate('/admin/products')
     }
 
     // Reset form after submission
