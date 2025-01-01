@@ -3,6 +3,7 @@ import { CartItem } from "@/types/types";
 import { motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { ShoppingCart, Eye } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 type ProductsProp = {
   productId: string;
@@ -23,6 +24,11 @@ const   ProductCard = ({
 }: ProductsProp) => {
   const [isHovered, setIsHovered] = useState(false);
 
+const navigate=useNavigate()
+  const handleNavigate = () => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <motion.div
       className="w-64 bg-gray-800 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative group"
@@ -31,15 +37,17 @@ const   ProductCard = ({
       transition={{ duration: 0.5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      
     >
       {/* Product Image */}
-      <div className="relative w-full h-48 overflow-hidden">
+      <div className="relative w-full h-48 overflow-hidden" onClick={handleNavigate}>
         <motion.img
           src={`${server}/${photo}`}
           alt={`Image of ${name}`}
           className="w-full h-full object-cover"
           animate={{ scale: isHovered ? 1.1 : 1 }}
           transition={{ duration: 0.3 }}
+          
         />
         <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         

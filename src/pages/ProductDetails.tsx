@@ -7,6 +7,7 @@ interface Product {
   photo: string;
 }
 
+import Loader from "@/components/custom/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { useDeleteProductMutation, useProductDetailsQuery, useUpdateProductMutation } from "@/redux/api/productAPI";
 import { server } from "@/redux/store";
@@ -118,7 +119,7 @@ const ProductDetailsPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <Loader className='w-screen h-screen'/>
       </div>
     );
   }
@@ -182,17 +183,14 @@ const ProductDetailsPage: React.FC = () => {
   
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
-              <select
+              <input
+              type="text"
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
                 className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
-              >
-                <option value="electronics">Electronics</option>
-                <option value="clothing">Clothing</option>
-                <option value="books">Books</option>
-                <option value="food">Food</option>
-              </select>
+              />
+               
             </div>
   
             <div>

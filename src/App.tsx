@@ -22,6 +22,7 @@ const Costomer = lazy(() => import("./pages/Costomer"));
 
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "./components/ui/toaster";
+import SingleProduct from "./pages/SingleProduct";
 const AddNewProduct = lazy(() => import("./pages/AddNewProduct"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 const AllTransactionsPage = lazy(() => import("./pages/Transactions"));
@@ -68,6 +69,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<SingleProduct />} />
           <Route>
             <Route
               path="/login"

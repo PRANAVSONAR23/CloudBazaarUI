@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Transaction {
   _id: string;
   orderItems: Array<{
     name: string;
     quantity: number;
+    productId: string;
   }>;
   subtotal: number;
   discount: number;
@@ -25,6 +27,13 @@ interface TransactionsTableProps {
 }
 
 const OrderTable: React.FC<TransactionsTableProps> = ({ transactions }) => {
+
+  const navigate=useNavigate()
+
+const handleViewClick = (id: string) => {
+  navigate(`/product/${id}`); 
+}
+
   return (
     <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-8 bg-gray-900  text-white ">
       <h1 className="text-3xl font-bold text-blue-500 mb-6">All Orders</h1>
@@ -95,7 +104,7 @@ const OrderTable: React.FC<TransactionsTableProps> = ({ transactions }) => {
                   {`${transaction.shippingInfo.address}, ${transaction.shippingInfo.city}, ${transaction.shippingInfo.state}, ${transaction.shippingInfo.country} ${transaction.shippingInfo.pincode}`}
                 </td>
                 <td className="px-6 py-4 text-right text-sm font-medium">
-                  <button className="bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 focus:outline-none">
+                  <button className="bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 focus:outline-none" onClick={() => handleViewClick(transaction.orderItems[0].productId!)}>
                     View
                   </button>
                 </td>
