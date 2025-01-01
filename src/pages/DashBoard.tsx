@@ -40,7 +40,7 @@ const Dashboard = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28']
 
   return (
-    <div className="container mx-auto p-6 bg-gray-900 text-white  ">
+    <div className="container mx-auto p-6 bg-gray-900 text-white  w-[70vw]">
       <h1 className="text-4xl font-extrabold text-blue-500 mb-8">Dashboard</h1>
       
       {/* Stats Cards */}
