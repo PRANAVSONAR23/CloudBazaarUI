@@ -83,6 +83,7 @@ const Shipping: React.FC = () => {
       const response = await axios.post('/api/submit-address', formData);
       toast({
         title: "Address submitted successfully!",
+        description: response.data.message
       })
       
     } catch (error) {

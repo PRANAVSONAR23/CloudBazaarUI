@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { format } from 'date-fns'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { server } from '@/redux/store'
 import { useSelector } from 'react-redux'

@@ -2,7 +2,7 @@ import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ShoppingCart, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 type ProductsProp = {
   productId: string;
