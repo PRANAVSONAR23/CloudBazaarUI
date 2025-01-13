@@ -1,4 +1,3 @@
-import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { Link } from "react-router-dom";
 import {Plus,Minus} from 'lucide-react'
@@ -17,14 +16,15 @@ const CartItemCard = ({
   decrementHandler,
   removeHandler,
 }: CartItemProps) => {
-  const { productId, photo, name, price, quantity } = cartItem;
+  const { productId, photos, name, price, quantity } = cartItem;
 
   return (
     <div className="flex items-center gap-6 p-6 bg-gray-900 text-white rounded-lg shadow-xl">
       {/* Product Image */}
+     
       <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden">
         <img
-          src={`${server}/${photo}`}
+          src={photos?.[0].url}
           alt={`${name} photo`}
           className="w-full h-full object-cover"
         />

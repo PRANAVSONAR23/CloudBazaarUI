@@ -4,13 +4,27 @@ interface Product {
   price: number;
   category: string;
   stock: number;
-  photo: string;
+  photos: {
+    url:string,
+    public_id:string
+  }[];
+}
+
+interface ProductUpdate {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  stock: number;
+  photos:File[] | {
+    url:string,
+    public_id:string
+  }[];
 }
 
 import Loader from "@/components/custom/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { useDeleteProductMutation, useProductDetailsQuery, useUpdateProductMutation } from "@/redux/api/productAPI";
-import { server } from "@/redux/store";
 import { UserReducerInitialState } from "@/types/reducer-types";
 import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -36,19 +50,20 @@ const ProductDetailsPage: React.FC = () => {
     price: 0,
     category: "",
     stock: 0,
-    photo: "",
+    photos: [],
   });
 
-  const [formData, setFormData] = useState<Product>({
+  const [formData, setFormData] = useState<ProductUpdate>({
     id: "",
     name: "",
     price: 0,
     category: "",
     stock: 0,
-    photo: "",
+    photos: [],
   });
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+ 
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const { toast } = useToast()
 
   // Update states when data is available
@@ -60,7 +75,7 @@ const ProductDetailsPage: React.FC = () => {
         price: data.product.price,
         category: data.product.category,
         stock: data.product.stock,
-        photo: data.product.photo,
+        photos: data.product.photos,
       };
       setDisplayProduct(productData);
       setFormData(productData);
@@ -78,22 +93,43 @@ const ProductDetailsPage: React.FC = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      setFormData(prev => ({
+        ...prev,
+        photos: [...files]
+      }));
+
+      // Create preview URLs for all files
+      const urls = files.map(file => URL.createObjectURL(file));
+      setPreviewUrls(prev => [...prev, ...urls]);
     }
   };
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const submitFormData = new FormData();
 
-    Object.entries(formData).forEach(([key, value]) => {
-      submitFormData.append(key, value.toString());
+    submitFormData.append('name', formData.name);
+    submitFormData.append('price', formData.price.toString());
+    submitFormData.append('category', formData.category);
+    submitFormData.append('stock', formData.stock.toString());
+    
+    // Append all photos
+    formData.photos.forEach((photo, index) => {
+      if (photo instanceof File) {
+        // Append File object directly
+        submitFormData.append(`photos`, photo);
+      } else if (typeof photo === 'object' && 'url' in photo) {
+        // Append the `url` from the object
+        submitFormData.append(`photos`, photo.url);
+      }
     });
-
-    if (selectedFile) {
-      submitFormData.append("photo", selectedFile);
-    }
    
     const res=await updateProduct({formData:submitFormData,userId:user?._id!,productId:data?.product._id!})
     console.log(res)    
@@ -134,7 +170,7 @@ const ProductDetailsPage: React.FC = () => {
           <h2 className="text-3xl font-bold mb-4">Product Details</h2>
           <div className="space-y-6">
             <img
-              src={`${server}/${displayProduct.photo}`}
+              src={displayProduct.photos?.[0]?.url}
               alt={displayProduct.name}
               className="w-full max-w-md rounded-lg mb-4"
             />
@@ -208,10 +244,12 @@ const ProductDetailsPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-300 mb-2">Photo</label>
               <input
                 type="file"
+                multiple
                 accept="image/*"
                 onChange={handleFileChange}
                 className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
               />
+              
             </div>
   
             <div className="flex space-x-4 pt-6">

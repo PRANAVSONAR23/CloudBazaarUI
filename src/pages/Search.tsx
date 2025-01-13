@@ -117,7 +117,7 @@ const Search: React.FC = () => {
                     productId={p._id}
                     name={p.name}
                     price={p.price}
-                    photo={p.photo}
+                    photos={p.photos}
                     stock={p.stock}
                     handler={addToCartHandler}
                   />

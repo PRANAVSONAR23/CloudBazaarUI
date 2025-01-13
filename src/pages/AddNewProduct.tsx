@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ interface FormData {
   price: string;
   category: string;
   stock: string;
-  photo: File | null;
+  photos: File[];
 }
 
 const AddProductForm = () => {
@@ -23,10 +23,10 @@ const AddProductForm = () => {
     price: '',
     category: '',
     stock: '',
-    photo: null
+    photos: []
   });
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,25 +37,41 @@ const AddProductForm = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
       setFormData(prev => ({
         ...prev,
-        photo: file
+        photos: [...prev.photos, ...files]
       }));
 
-      // Create preview URL
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      // Create preview URLs for all files
+      const urls = files.map(file => URL.createObjectURL(file));
+      setPreviewUrls(prev => [...prev, ...urls]);
     }
   };
 
+  // Cleanup function for preview URLs
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
+
+  const removePhoto = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      photos: prev.photos.filter((_, i) => i !== index)
+    }));
+    
+    URL.revokeObjectURL(previewUrls[index]);
+    setPreviewUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
   const { user } = useSelector((state: { userReducer: UserReducerInitialState }) => state.userReducer);
-
   const [newProduct] = useNewProductMutation();
-  const { toast } = useToast()
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const navigate=useNavigate()
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -65,20 +81,20 @@ const AddProductForm = () => {
     productFormData.append('price', formData.price.toString());
     productFormData.append('category', formData.category);
     productFormData.append('stock', formData.stock.toString());
-    if (formData.photo) {
-      productFormData.append('photo', formData.photo);
-    }
+    
+    // Append all photos
+    formData.photos.forEach((photo, index) => {
+      productFormData.append(`photos`, photo);
+    });
 
     const res = await newProduct({ id: user?._id!, formData: productFormData });
-
-    
 
     if (res?.data?.message === 'Product created successfully') {
       toast({
         title: 'Product added successfully 🎉',
         description: `Product ${formData.name} has been added successfully`,
       });
-      navigate('/admin/products')
+      navigate('/admin/products');
     }
 
     // Reset form after submission
@@ -87,14 +103,14 @@ const AddProductForm = () => {
       price: '',
       category: '',
       stock: '',
-      photo: null
+      photos: []
     });
-    setPreviewUrl(null);
+    setPreviewUrls([]);
   };
 
   return (
     <div className="bg-gray-900 min-h-screen py-6 px-4 w-[80vw]">
-      <Card className="w-full max-w-2xl mx-auto bg-gray-900 text-white shadow-lg rounded-xl ">
+      <Card className="w-full max-w-2xl mx-auto bg-gray-900 text-white shadow-lg rounded-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-semibold text-blue-500">Add New Product</CardTitle>
         </CardHeader>
@@ -122,7 +138,6 @@ const AddProductForm = () => {
                 value={formData.price}
                 onChange={handleInputChange}
                 required
-                
                 placeholder="Enter price"
                 className="p-4 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-white"
               />
@@ -155,22 +170,34 @@ const AddProductForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="photo" className="text-lg font-medium text-gray-200">Product Photo</Label>
+              <Label htmlFor="photo" className="text-lg font-medium text-gray-200">Product Photos</Label>
               <Input
                 id="photo"
                 name="photo"
                 type="file"
+                multiple
                 onChange={handleFileChange}
                 accept="image/*"
                 className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 h-12 border-none"
               />
-              {previewUrl && (
-                <div className="mt-2">
-                  <img
-                    src={previewUrl}
-                    alt="Preview"
-                    className="w-32 h-32 object-cover rounded-lg"
-                  />
+              {previewUrls.length > 0 && (
+                <div className="mt-2 grid grid-cols-3 gap-4">
+                  {previewUrls.map((url, index) => (
+                    <div key={url} className="relative">
+                      <img
+                        src={url}
+                        alt={`Preview ${index + 1}`}
+                        className="w-32 h-32 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
