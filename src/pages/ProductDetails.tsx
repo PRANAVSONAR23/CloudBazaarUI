@@ -121,7 +121,7 @@ const ProductDetailsPage: React.FC = () => {
     submitFormData.append('stock', formData.stock.toString());
     
     // Append all photos
-    formData.photos.forEach((photo, index) => {
+    formData.photos.forEach((photo) => {
       if (photo instanceof File) {
         // Append File object directly
         submitFormData.append(`photos`, photo);

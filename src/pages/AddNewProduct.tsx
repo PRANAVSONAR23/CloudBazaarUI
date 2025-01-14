@@ -83,7 +83,7 @@ const AddProductForm = () => {
     productFormData.append('stock', formData.stock.toString());
     
     // Append all photos
-    formData.photos.forEach((photo, index) => {
+    formData.photos.forEach((photo) => {
       productFormData.append(`photos`, photo);
     });
 

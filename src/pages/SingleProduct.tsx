@@ -1,7 +1,6 @@
 import { useProductDetailsQuery } from "@/redux/api/productAPI";
 import { useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { useToast } from "@/hooks/use-toast";
 import { useDispatch } from "react-redux";

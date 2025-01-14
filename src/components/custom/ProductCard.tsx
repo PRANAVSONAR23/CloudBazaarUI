@@ -1,4 +1,3 @@
-import { server } from "@/redux/store";
 import { CartItem } from "@/types/types";
 import { motion } from "framer-motion";
 import { ReactElement, useState } from "react";
