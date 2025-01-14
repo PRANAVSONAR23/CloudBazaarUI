@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 type ProductsProp = {
   productId: string;
-  photo: string;
+  photos: {
+    url:string,
+    public_id:string
+  }[];
   name: string;
   price: number;
   stock: number;
@@ -16,7 +19,7 @@ type ProductsProp = {
 
 const   ProductCard = ({
   productId,
-  photo,
+  photos,
   name,
   price,
   stock,
@@ -42,7 +45,7 @@ const navigate=useNavigate()
       {/* Product Image */}
       <div className="relative w-full h-48 overflow-hidden" onClick={handleNavigate}>
         <motion.img
-          src={`${server}/${photo}`}
+          src={photos?.[0]?.url}
           alt={`Image of ${name}`}
           className="w-full h-full object-cover"
           animate={{ scale: isHovered ? 1.1 : 1 }}
@@ -85,7 +88,7 @@ const navigate=useNavigate()
         <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => handler({ productId, price, stock, name, photo, quantity: 1 })}
+          onClick={() => handler({ productId, price, stock, name, photos:photos, quantity: 1 })}
           disabled={stock === 0}
           className={`w-full py-2 rounded-xl text-white font-semibold text-sm transition-all duration-300 ease-in-out flex items-center justify-center space-x-1 ${
             stock > 0

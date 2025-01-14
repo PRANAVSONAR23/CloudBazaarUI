@@ -48,7 +48,7 @@ const Products = () => {
               productId={p._id}
               name={p.name}
               price={p.price}
-              photo={p.photo}
+              photos={p.photos}
               stock={p.stock}
               handler={() => view(p._id)}
             />

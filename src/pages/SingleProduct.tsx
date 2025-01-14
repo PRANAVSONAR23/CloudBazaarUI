@@ -43,7 +43,7 @@ const addToCartHandler = (cartItem: CartItem) => {
   const product = data?.product;
   const inStock = product?.stock! > 0;
 
-  const {_id,photo,name,price,stock} =product!
+  const {_id,photos,name,price,stock} =product!
 
   return (
     <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -54,7 +54,7 @@ const addToCartHandler = (cartItem: CartItem) => {
             <div className="md:w-1/2">
               <div className="h-96 relative">
                 <img
-                  src={`${server}/${product?.photo}`}
+                  src={photos?.[0].url}
                   alt={product?.name}
                   className="w-full h-full object-cover"
                 />
@@ -114,7 +114,7 @@ const addToCartHandler = (cartItem: CartItem) => {
                       : "bg-gray-600 cursor-not-allowed"
                     }`}
                   disabled={!inStock}
-                  onClick={() => addToCartHandler({ productId: _id, photo, name, price, stock, quantity: 1 })}
+                  onClick={() => addToCartHandler({ productId: _id, photos, name, price, stock, quantity: 1 })}
                 >
                   Add to Cart
                 </button>

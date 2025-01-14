@@ -15,7 +15,10 @@ export type Product={
     price:number,
     stock:number,
     category:string,
-    photo:string,
+    photos:{
+      url:string,
+      public_id:string
+    }[],
 }
 
 
@@ -30,7 +33,10 @@ export type ShippingType={
 
 export type CartItem={
     productId:string;
-    photo:string;
+    photos:{
+      url:string,
+      public_id:string
+    }[],
     name:string;
     price:number;
     quantity:number;
